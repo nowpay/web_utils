@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="jquery.min.js"></script>
+		<script src="qrcode.min.js"></script>
+  <style>
+    textarea {
+      width: 400px;
+      height: 200px;
+    }
+    #qrcode > div {
+      margin: 20px;
+    }
+  </style>
+  </head>
+	<body>
+		<div id="qrcode"></div>
+    <textarea id="content"></textarea>
+		<button type="button" id="generate">generate</button>
+    <span id="hint"></span>
+		<script type="text/javascript">
+      var size = 400;
+      var qrcode = $('#qrcode');
+      $('#content').on('input', function() {
+        var len = $(this).val().length;
+        var num = (Math.floor(len/size)+1);
+        $('#hint').text('字符：' + len + ", 二维码" + num + "个二维码");
+      });
+			$('#generate').on('click', function() {
+        qrcode.empty();
+        var len = $('#content').val().length;
+        var num = (Math.floor(len/size)+1);
+
+        var els = [];
+        for (var i=0; i<num; i++) {
+          var el = $('<div></div>');
+          els.push(el);
+          qrcode.append(el);
+        }
+
+        for (var i=0; i<num; i++) {
+          var text = $('#content').val();
+          new QRCode(qrcode.find('div').eq(i)[0], text.substring(size*i, size*(i+1)));
+        }
+      });
+		</script>
+	</body>
+</html>
